@@ -52,7 +52,7 @@ setmetatable(_M, {
     end
 })
 
-
+--返回HTTP错误码对应的字符串
 function _M.from_code(code)
     if not code or not tonumber(code) then
         return _M.UNKNOWN_ERR

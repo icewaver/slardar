@@ -28,7 +28,7 @@ _M.global = {
     no_consul = true,
 }
 
-
+--定义一个consul的upstream，用于获取系统的upstream
 _M.consul = {
     -- connect to consul will timeout in 5s.
     timeout = 5,

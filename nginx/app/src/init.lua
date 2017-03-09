@@ -8,6 +8,7 @@ slardar = require "config" -- global config variable
 
 slardar.global.version = "1.0.0"
 
+--slardar包装额ngx.exit()函数
 slardar.exit = function(err)
     if ngx.headers_sent then
         return ngx.exit(ngx.status)
@@ -44,6 +45,7 @@ end
 
 local no_consul = slardar.global.no_consul
 
+--调用consul.init初始化consul模块
 -- if init config failed, abort -t or reload.
 local ok, init_ok = pcall(consul.init, slardar)
 if no_consul ~= true then
@@ -54,6 +56,7 @@ if no_consul ~= true then
     end
 end
 
+调用mload.init初始化mload模块
 local ok, init_ok = pcall(mload.init, slardar)
 if no_consul ~= true then
     if not ok then
