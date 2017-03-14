@@ -10,7 +10,7 @@ local tab_concat = table.concat
 local str_format = string.format
 local str_sub    = string.sub
 
---该模块用于和consul通信，取到当前的所有upstream
+--璇ユā鍧楃敤浜庡拰consul閫氫俊锛屽彇鍒板綋鍓嶇殑鎵�鏈塽pstream
 
 local _M = {}
 

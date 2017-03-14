@@ -5,9 +5,9 @@ local mload    = require "modules.load"
 
 checkups.prepare_checker(slardar)
 
---Æô¶¯checkups
+--å¯åŠ¨checkups
 -- only one checkups timer is active among all the nginx workers
 checkups.create_checker()
 
---´´½¨×Ô¶¯Í¬²½lua moduleµÄÊ±ÖÓ
+--åˆ›å»ºè‡ªåŠ¨åŒæ­¥lua moduleçš„æ—¶é’Ÿ
 mload.create_load_syncer()

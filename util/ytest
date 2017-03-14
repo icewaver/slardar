@@ -544,9 +544,12 @@ def main():
     options, args = parser.parse_args()
 
     test_dir = args[0] if args else 'tests'
+    #此处需要做修改，使用绝对路径最合适
     sys.path.append(test_dir.split(os.path.sep)[0])
 
+    #收集所有的test.yt file
     test_files = gather_files(test_dir)
+    #收集所有的test case
     test_cases = gather_cases(test_files, options.filter)
 
     total_cases = sum(len(c) for f, (e, c) in test_cases)

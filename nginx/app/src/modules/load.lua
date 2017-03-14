@@ -30,7 +30,7 @@ local SKEYS_KEY     = "lua:skeys"
 local VERSION_KEY   = "lua:version"
 local TIMER_DELAY   = 1
 local CODE_PREFIX   = "update:"
-local version_dict  = {} -- skey��version�Ķ�Ӧ��ϵ����shm load_dict[SKEYS_KEY]ͬ��
+local version_dict  = {} -- skey和version的对应关系，与shm load_dict[SKEYS_KEY]同步
 local global_version
 
 
@@ -100,8 +100,8 @@ local function get_code_version(skey)
 end
 
 
---���е�ϵͳ����ʹ�õ�lua module������ڱ���ȫ�ֱ���version_dict
---����shm load_dict:SKEYS����ϵͳ�����е�module��������֮һһ�ȶ�
+--所有的系统正在使用的lua module都存放在本地全局变量version_dict
+--另外shm load_dict:SKEYS中有系统的所有的module，定期与之一一比对
 local function load_syncer(premature)
     if premature then
         return
@@ -120,7 +120,7 @@ local function load_syncer(premature)
             if not skeys[key] then
                 log(INFO, key, " unload from package")
                 version_dict[key] = nil
-                -- ж�ص�key��Ӧ��lua�ļ�
+                -- 卸载掉key对应的lua文件
                 package.loaded[key] = nil
             end
         end
@@ -132,7 +132,7 @@ local function load_syncer(premature)
             end
             if package.loaded[skey] and worker_version ~= sh_value.version then
                 log(INFO, skey, " version changed")
-                -- ����version�仯ʱ��ɾ������ʹ�õ�module
+                -- 当有version变化时，删除现在使用的module
                 version_dict[skey] = nil
                 package.loaded[skey] = nil
             end
@@ -147,7 +147,7 @@ local function load_syncer(premature)
     end
 end
 
---����load moudle��timer
+--创建load moudle的timer
 function _M.create_load_syncer()
     global_version = load_dict:get(VERSION_KEY)
     local ok, err = timer_at(TIMER_DELAY, load_syncer)
@@ -379,8 +379,8 @@ function _M.install_code(skey)
     return true
 end
 
---��skeyΪnilʱ����������modules��version
---���򷵻�skey��Ӧ��modules��version
+--当skey为nil时，返回所有modules的version
+--否则返回skey对应的modules的version
 function _M.get_version(skey)
     local skeys = load_dict:get(SKEYS_KEY)
     if skeys then
@@ -408,7 +408,7 @@ function _M.get_version(skey)
 
 end
 
---������ɳ�ӵĺ�������
+--设置有沙河的函数环境
 function _M.load_script(script_name, env)
     local ok, mode = pcall(require, script_name)
     if not ok then

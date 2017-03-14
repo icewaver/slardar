@@ -52,7 +52,7 @@ setmetatable(_M, {
     end
 })
 
---·µ»ØHTTP´íÎóÂë¶ÔÓ¦µÄ×Ö·û´®
+--è¿”å›HTTPé”™è¯¯ç å¯¹åº”çš„å­—ç¬¦ä¸²
 function _M.from_code(code)
     if not code or not tonumber(code) then
         return _M.UNKNOWN_ERR
